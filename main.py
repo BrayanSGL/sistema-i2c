@@ -15,13 +15,15 @@ registerFrame = tk.Canvas(root, width=350, height=300, bg='Gray')
 registerFrame.grid(row=0, column=1)
 
 # ---------------------Se establace la posicion de los botones----------
-botonSaveInfo = Button(buttonsFrame, text='Save RTC').grid(
+botonSaveInfo = Button(buttonsFrame, text='Guardar datos RTC').grid(
     row=0, column=0, padx=10, pady=10)
-botonReadInfo = Button(buttonsFrame, text='Read EEPROM').grid(
+botonReadInfo = Button(buttonsFrame, text='Leer datos de la EEPROM').grid(
     row=1, column=0, padx=10, pady=10)
-botonOnOffLed = Button(buttonsFrame, text='on | off Led').grid(
+botonOnOffLed = Button(buttonsFrame, text='Apagar LED').grid(
     row=2, column=0, padx=10, pady=10)
-botonReadADC = Button(buttonsFrame, text='Read ADC').grid(
+botonOnOffLed = Button(buttonsFrame, text='Encender LED').grid(
+    row=2, column=0, padx=10, pady=10)
+botonReadADC = Button(buttonsFrame, text='Leer ADC').grid(
     row=3, column=0, padx=10, pady=10)
 
 # start()
