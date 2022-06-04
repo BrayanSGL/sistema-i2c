@@ -26,31 +26,31 @@ registerFrame.grid(row=0, column=1)
 
 # ---------------------Se establace la posicion de los botones----------
 botonSaveInfo = Button(buttonsFrame, text='Guardar datos RTC', font=font.Font(
-    family="Verdana", size=8,
-)).grid(
+    family="Verdana", size=8
+),width=28).grid(
     row=0, column=0, padx=5, pady=15, columnspan=2)
 botonReadInfo = Button(buttonsFrame, text='Leer datos de la EEPROM', font=font.Font(
-    family="Verdana", size=8,
-)).grid(
-    row=1, column=0, padx=5, pady=15, columnspan=2)
+    family="Verdana", size=8
+),width=28).grid(
+    row=1, column=0, padx=5, pady=10, columnspan=2)
 botonReadInfoEspecifico = Button(buttonsFrame, text='Dato especifico', font=font.Font(
-    family="Verdana", size=8,
-)).grid(
+    family="Verdana", size=8
+), width=12).grid(
     row=2, column=0, padx=10, pady=15)
 combo = ttk.Combobox(buttonsFrame, values=[
-                     "Bloque 1", "Bloque 2", "Bloque 3", "Bloque 4", "Bloque 5"], width=10)
+                     "Bloque 1", "Bloque 2", "Bloque 3", "Bloque 4", "Bloque 5"], width=12)
 combo.grid(row=2, column=1)
 botonOffLed = Button(buttonsFrame, text='Apagar LED', font=font.Font(
-    family="Verdana", size=8,
-)).grid(
+    family="Verdana", size=8
+),width=12).grid(
     row=3, column=0, padx=8, pady=15)
 botonOnLed = Button(buttonsFrame, text='Encender LED', font=font.Font(
-    family="Verdana", size=8,
-)).grid(
+    family="Verdana", size=8
+),width=12).grid(
     row=3, column=1, padx=8, pady=15)
 botonReadADC = Button(buttonsFrame, text='Leer ADC', font=font.Font(
-                      family="Verdana", size=8,
-                      )).grid(
+                      family="Verdana", size=8
+                      ), width=28).grid(
     row=4, column=0, padx=5, pady=15, columnspan=2)
 
 # -----------------------Se establese el frame de registros y entrada de comandos
