@@ -13,9 +13,36 @@ root = tk.Tk()
 root.title('Tercera entrega')
 root.resizable(height=False, width=False)
 
+data =''
+
+# --------------Configuración Serial----------------
+def timer():
+    global data
+    global register
+    while True:
+        nucleo = serial.Serial('COM3', 9600)
+        rawString = str(nucleo.readline())
+        rawString = rawString.strip("b'\.n")  # Ya tengo mi valor @Data# limpio
+        #Limpieza y verificación del dato en Serial
+        if(rawString.count('@') == 1) and (rawString.count('#') == 1):
+            data = rawString.strip("@#")
+        print(data)
+        #register.insert(END, 'word ' * 100)
+        nucleo.close()
+        time.sleep(0.1)  # 100ms
+
+
+t = threading.Thread(target=timer)
+t.start()
+
 
 def test():
     print('me llamaron')
+
+
+
+
+
 
 
 # ------------------------Configuracion inicial de frames -------
@@ -27,11 +54,11 @@ registerFrame.grid(row=0, column=1)
 # ---------------------Se establace la posicion de los botones----------
 botonSaveInfo = Button(buttonsFrame, text='Guardar datos RTC', font=font.Font(
     family="Verdana", size=8
-),width=28).grid(
+), width=28).grid(
     row=0, column=0, padx=5, pady=15, columnspan=2)
 botonReadInfo = Button(buttonsFrame, text='Leer datos de la EEPROM', font=font.Font(
     family="Verdana", size=8
-),width=28).grid(
+), width=28).grid(
     row=1, column=0, padx=5, pady=10, columnspan=2)
 botonReadInfoEspecifico = Button(buttonsFrame, text='Dato especifico', font=font.Font(
     family="Verdana", size=8
@@ -42,11 +69,11 @@ combo = ttk.Combobox(buttonsFrame, values=[
 combo.grid(row=2, column=1)
 botonOffLed = Button(buttonsFrame, text='Apagar LED', font=font.Font(
     family="Verdana", size=8
-),width=12).grid(
+), width=12).grid(
     row=3, column=0, padx=8, pady=15)
 botonOnLed = Button(buttonsFrame, text='Encender LED', font=font.Font(
     family="Verdana", size=8
-),width=12).grid(
+), width=12).grid(
     row=3, column=1, padx=8, pady=15)
 botonReadADC = Button(buttonsFrame, text='Leer ADC', font=font.Font(
                       family="Verdana", size=8
@@ -61,12 +88,7 @@ tk.Label(registerFrame, text='Comando:', bg='Light gray').grid(
 label = Label(registerFrame, text='COMANDO:')
 label.grid(row=0, column=0, pady=10, padx=8)
 label.config(fg="Black", bg='Light gray', font=("Verdana", 12), justify='left')
-"""
-entryComand = Entry(registerFrame)
-entryComand.grid(row=0, column=1, padx=10, pady=18, columnspan=4)
-entryComand.config(background="black", fg="#FFFFFF",
-                   justify="center", width=30)
-"""
+
 entry = ttk.Entry(registerFrame,
                   font=font.Font(
                       family="Verdana",
