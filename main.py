@@ -13,21 +13,33 @@ root = tk.Tk()
 root.title('Tercera entrega')
 root.resizable(height=False, width=False)
 
-data =''
+data = ''
+recibido = 'new'
 
 # --------------Configuración Serial----------------
+
+
 def timer():
     global data
-    global register
+    global recibido
     while True:
         nucleo = serial.Serial('COM3', 9600)
         rawString = str(nucleo.readline())
         rawString = rawString.strip("b'\.n")  # Ya tengo mi valor @Data# limpio
-        #Limpieza y verificación del dato en Serial
+        # Limpieza y verificación del dato en Serial
         if(rawString.count('@') == 1) and (rawString.count('#') == 1):
             data = rawString.strip("@#")
+        recibido = data
         print(data)
         #register.insert(END, 'word ' * 100)
+        register = Text(registerFrame, height=10, width=25, font=font.Font(
+            family="Verdana", size=11,
+        ))
+        register.insert(INSERT, recibido)
+        register.grid(
+            row=2, column=0, columnspan=2, pady=10, padx=10)
+
+        ##
         nucleo.close()
         time.sleep(0.1)  # 100ms
 
@@ -38,11 +50,6 @@ t.start()
 
 def test():
     print('me llamaron')
-
-
-
-
-
 
 
 # ------------------------Configuracion inicial de frames -------
@@ -105,9 +112,10 @@ botonComand = Button(registerFrame, text='Enviar comando',
                          family="Verdana", size=8,
                      )).grid(row=1, column=0, columnspan=2)
 # entryComand.bind('<Return>', test())  # ('<Return>',funcionALlamar)
+
 register = Text(registerFrame, height=10, width=25, font=font.Font(
-    family="Verdana", size=11,
-)).grid(
+    family="Verdana", size=11,))
+register.grid(
     row=2, column=0, columnspan=2, pady=10, padx=10)
 
 # start()
