@@ -16,6 +16,7 @@ root.resizable(height=False, width=False)
 data = ''
 recibido = ''
 led=False
+selector=''
 
 # --------------Configuración Serial----------------
 
@@ -23,7 +24,7 @@ led=False
 def timer():
     global data
     global recibido
-    global led
+    global selector
     while True:
         nucleo = serial.Serial('COM3', 9600)
         rawString = str(nucleo.readline())
@@ -33,6 +34,8 @@ def timer():
              data = rawString.strip("@#")
              recibido  = data
              print(data)
+        print(rawString)
+       
         ##
 
         register = Text(registerFrame, height=10, width=25, font=font.Font(
@@ -44,12 +47,42 @@ def timer():
 
         ##
 
-        
-
-        if led==True:
-            nucleo.write(b'@')
-            led=False
+    
+        if selector=='w':   #ADC 
+            nucleo.write(b'w')
+            selector=0
             print('entre')
+
+        elif selector=='@':  #LED
+            nucleo.write(b'@')
+            selector=0
+            print('entre')
+
+        elif selector=='r':  #RTC
+            nucleo.write(b'r')
+            selector=0
+            print('entre')
+
+        elif selector=='e':  #BorrarTodo
+            nucleo.write(b'e')
+            selector=0
+            print('entre')
+
+        elif selector=='p':  #Especifico
+            nucleo.write(b'p')
+            selector=0
+            print('entre')
+
+        elif selector=='t':  #LeerTodo
+            nucleo.write(b't')
+            selector=0
+            print('entre')
+
+
+
+
+
+
 
         nucleo.close()
         time.sleep(0.1)  # 100ms
@@ -64,9 +97,12 @@ def test():
 
 
 def OnOffLed():
-    global led
-    led=True
+    global selector
+    selector='@'
     
+def ADC():
+    global selector
+    selector='w'
 
 
 # ------------------------Configuracion inicial de frames -------
@@ -91,15 +127,15 @@ botonReadInfoEspecifico = Button(buttonsFrame, text='Dato especifico', font=font
 combo = ttk.Combobox(buttonsFrame, values=[
                      "Bloque 1", "Bloque 2", "Bloque 3", "Bloque 4", "Bloque 5"], width=12)
 combo.grid(row=2, column=1)
-botonOffLed = Button(buttonsFrame, text='Apagar LED',command=OnOffLed, font=font.Font(
+botonOffLed = Button(buttonsFrame, text='ON|OFF LED',command=OnOffLed, font=font.Font(
     family="Verdana", size=8
 ), width=12).grid(
     row=3, column=0, padx=8, pady=15)
-botonOnLed = Button(buttonsFrame, text='Encender LED', font=font.Font(
+borrar = Button(buttonsFrame, text='Borrar EEPROM', font=font.Font(
     family="Verdana", size=8
 ), width=12).grid(
     row=3, column=1, padx=8, pady=15)
-botonReadADC = Button(buttonsFrame, text='Leer ADC', font=font.Font(
+botonReadADC = Button(buttonsFrame, text='Leer ADC', command=ADC, font=font.Font(
                       family="Verdana", size=8
                       ), width=28).grid(
     row=4, column=0, padx=5, pady=15, columnspan=2)
