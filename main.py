@@ -30,7 +30,7 @@ def timer():
     global indexEspecifico
 
     while True:
-        nucleo = serial.Serial('COM3', 9600)
+        nucleo = serial.Serial('COM3', 115200)
         rawString = str(nucleo.readline())
         rawString = rawString.strip("b'\.n")  # Ya tengo mi valor @Data# limpio
         # Limpieza y verificación del dato en Serial
@@ -153,7 +153,7 @@ registerFrame = tk.Canvas(root, width=350, height=275, bg='Light gray')
 registerFrame.grid(row=0, column=1)
 
 # ---------------------Se establace la posicion de los botones----------
-botonSaveInfo = Button(buttonsFrame, text='Guardar datos RTC', font=font.Font(
+botonSaveInfo = Button(buttonsFrame, text='ENTREGA TRES', font=font.Font(
     family="Verdana", size=8
 ), width=28).grid(
     row=0, column=0, padx=5, pady=15, columnspan=2)
