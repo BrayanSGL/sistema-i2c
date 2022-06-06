@@ -18,6 +18,7 @@ recibido = ''
 selector = ''
 comando = ''
 comandoPantallaNuevo = ''
+indexEspecifico=''
 # --------------Configuración Serial----------------
 
 
@@ -26,6 +27,7 @@ def timer():
     global recibido
     global selector
     global comandoPantallaNuevo
+    global indexEspecifico
 
     while True:
         nucleo = serial.Serial('COM3', 9600)
@@ -68,12 +70,33 @@ def timer():
             nucleo.write(b'e')
             selector = 0
             print('entre')
-
-        elif selector == 'p' or comandoPantallaNuevo == 'S22':  # Especifico
-            nucleo.write(b'p')
+####----------------------Especifico
+        elif selector == '1' or comandoPantallaNuevo == 'S21':  # Especifico
+            nucleo.write(b'1')
             selector = 0
             print('entre')
 
+        elif selector == '2' or comandoPantallaNuevo == 'S22':  # Especifico
+            nucleo.write(b'2')
+            selector = 0
+            print('entre')
+
+        elif selector == '3' or comandoPantallaNuevo == 'S23':  # Especifico
+            nucleo.write(b'3')
+            selector = 0
+            print('entre3')
+
+        elif selector == '4' or comandoPantallaNuevo == 'S24':  # Especifico
+            nucleo.write(b'4')
+            selector = 0
+            print('entre')
+
+        elif selector == '5' or comandoPantallaNuevo == 'S25':  # Especifico
+            nucleo.write(b'5')
+            selector = 0
+            print('entre')
+
+#################
         elif selector == 't' or comandoPantallaNuevo == 'S2T':  # LeerTodo
             nucleo.write(b't')
             selector = 0
@@ -103,11 +126,25 @@ def OnOffLed():
     global selector
     selector = '@'
 
-
 def ADC():
     global selector
     selector = 'w'
 
+def leerTodo():
+    global selector
+    selector = 't'
+
+def borrarTodo():
+    global selector
+    selector = 'e'
+
+def datoEspecifico():
+    global selector
+    global indexCombo
+    global indexEspecifico
+    indexEspecifico = indexCombo.get()
+    selector = indexEspecifico
+    print(indexEspecifico)
 
 # ------------------------Configuracion inicial de frames -------
 buttonsFrame = tk.Canvas(root, width=350, height=200, bg='Light gray')
@@ -120,22 +157,22 @@ botonSaveInfo = Button(buttonsFrame, text='Guardar datos RTC', font=font.Font(
     family="Verdana", size=8
 ), width=28).grid(
     row=0, column=0, padx=5, pady=15, columnspan=2)
-botonReadInfo = Button(buttonsFrame, text='Leer datos de la EEPROM', font=font.Font(
+botonReadInfo = Button(buttonsFrame, text='Leer datos de la EEPROM',command=leerTodo, font=font.Font(
     family="Verdana", size=8
 ), width=28).grid(
     row=1, column=0, padx=5, pady=10, columnspan=2)
-botonReadInfoEspecifico = Button(buttonsFrame, text='Dato especifico', font=font.Font(
+botonReadInfoEspecifico = Button(buttonsFrame, text='Dato especifico',command=datoEspecifico, font=font.Font(
     family="Verdana", size=8
 ), width=12).grid(
     row=2, column=0, padx=10, pady=15)
-combo = ttk.Combobox(buttonsFrame, values=[
-                     "Bloque 1", "Bloque 2", "Bloque 3", "Bloque 4", "Bloque 5"], width=12)
-combo.grid(row=2, column=1)
+indexCombo=StringVar();
+combo = Entry(buttonsFrame,textvariable=indexCombo, width=12).grid(row=2, column=1)
+
 botonOffLed = Button(buttonsFrame, text='ON|OFF LED', command=OnOffLed, font=font.Font(
     family="Verdana", size=8
 ), width=12).grid(
     row=3, column=0, padx=8, pady=15)
-borrar = Button(buttonsFrame, text='Borrar EEPROM', font=font.Font(
+borrar = Button(buttonsFrame, text='Borrar EEPROM',command=borrarTodo, font=font.Font(
     family="Verdana", size=8
 ), width=12).grid(
     row=3, column=1, padx=8, pady=15)
