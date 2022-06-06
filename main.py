@@ -19,6 +19,9 @@ selector = ''
 comando = ''
 comandoPantallaNuevo = ''
 indexEspecifico=''
+data1=''
+total=0
+bandera=0
 # --------------Configuración Serial----------------
 
 
@@ -28,15 +31,25 @@ def timer():
     global selector
     global comandoPantallaNuevo
     global indexEspecifico
+    global total
+    global bandera
+    global data1
 
     while True:
-        nucleo = serial.Serial('COM3', 115200)
+        nucleo = serial.Serial('COM3', 9600)
         rawString = str(nucleo.readline())
         rawString = rawString.strip("b'\.n")  # Ya tengo mi valor @Data# limpio
         # Limpieza y verificación del dato en Serial
         if(rawString.count('@') == 1) and (rawString.count('#') == 1):
             data = rawString.strip("@#")
             recibido = data
+            if total<5 and bandera==1:
+                data1 = data1+data+"\n"
+                total+=1
+                if total==5:
+                    bandera=0
+                    recibido = data1;
+                    data1 = ''
             print(data)
         print(rawString)
 
@@ -100,6 +113,8 @@ def timer():
         elif selector == 't' or comandoPantallaNuevo == 'S2T':  # LeerTodo
             nucleo.write(b't')
             selector = 0
+            bandera = 1
+            total = 0
             print('entre')
 
         comandoPantallaNuevo = ''
