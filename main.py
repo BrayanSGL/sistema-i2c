@@ -14,7 +14,8 @@ root.title('Tercera entrega')
 root.resizable(height=False, width=False)
 
 data = ''
-recibido = 'new'
+recibido = ''
+led=False
 
 # --------------Configuración Serial----------------
 
@@ -22,16 +23,18 @@ recibido = 'new'
 def timer():
     global data
     global recibido
+    global led
     while True:
         nucleo = serial.Serial('COM3', 9600)
         rawString = str(nucleo.readline())
         rawString = rawString.strip("b'\.n")  # Ya tengo mi valor @Data# limpio
         # Limpieza y verificación del dato en Serial
         if(rawString.count('@') == 1) and (rawString.count('#') == 1):
-            data = rawString.strip("@#")
-        recibido = data
-        print(data)
-        #register.insert(END, 'word ' * 100)
+             data = rawString.strip("@#")
+             recibido  = data
+             print(data)
+        ##
+
         register = Text(registerFrame, height=10, width=25, font=font.Font(
             family="Verdana", size=11,
         ))
@@ -40,6 +43,14 @@ def timer():
             row=2, column=0, columnspan=2, pady=10, padx=10)
 
         ##
+
+        
+
+        if led==True:
+            nucleo.write(b'@')
+            led=False
+            print('entre')
+
         nucleo.close()
         time.sleep(0.1)  # 100ms
 
@@ -50,6 +61,12 @@ t.start()
 
 def test():
     print('me llamaron')
+
+
+def OnOffLed():
+    global led
+    led=True
+    
 
 
 # ------------------------Configuracion inicial de frames -------
@@ -74,7 +91,7 @@ botonReadInfoEspecifico = Button(buttonsFrame, text='Dato especifico', font=font
 combo = ttk.Combobox(buttonsFrame, values=[
                      "Bloque 1", "Bloque 2", "Bloque 3", "Bloque 4", "Bloque 5"], width=12)
 combo.grid(row=2, column=1)
-botonOffLed = Button(buttonsFrame, text='Apagar LED', font=font.Font(
+botonOffLed = Button(buttonsFrame, text='Apagar LED',command=OnOffLed, font=font.Font(
     family="Verdana", size=8
 ), width=12).grid(
     row=3, column=0, padx=8, pady=15)
