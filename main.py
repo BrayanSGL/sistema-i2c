@@ -15,9 +15,9 @@ root.resizable(height=False, width=False)
 
 data = ''
 recibido = ''
-led=False
-selector=''
-
+selector = ''
+comando = ''
+comandoPantallaNuevo = ''
 # --------------Configuración Serial----------------
 
 
@@ -25,17 +25,19 @@ def timer():
     global data
     global recibido
     global selector
+    global comandoPantallaNuevo
+
     while True:
         nucleo = serial.Serial('COM3', 9600)
         rawString = str(nucleo.readline())
         rawString = rawString.strip("b'\.n")  # Ya tengo mi valor @Data# limpio
         # Limpieza y verificación del dato en Serial
         if(rawString.count('@') == 1) and (rawString.count('#') == 1):
-             data = rawString.strip("@#")
-             recibido  = data
-             print(data)
+            data = rawString.strip("@#")
+            recibido = data
+            print(data)
         print(rawString)
-       
+
         ##
 
         register = Text(registerFrame, height=10, width=25, font=font.Font(
@@ -47,43 +49,37 @@ def timer():
 
         ##
 
-    
-        if selector=='w':   #ADC 
+        if selector == 'w' or comandoPantallaNuevo == 'S3L':  # ADC
             nucleo.write(b'w')
-            selector=0
+            selector = 0
             print('entre')
 
-        elif selector=='@':  #LED
+        elif selector == '@' or comandoPantallaNuevo == 'S3O' or comandoPantalla == 'S3A':  # LED
             nucleo.write(b'@')
-            selector=0
+            selector = 0
             print('entre')
 
-        elif selector=='r':  #RTC
+        elif selector == 'r' or comandoPantallaNuevo == 'S1G':  # RTC
             nucleo.write(b'r')
-            selector=0
+            selector = 0
             print('entre')
 
-        elif selector=='e':  #BorrarTodo
+        elif selector == 'e' or comandoPantallaNuevo == 'S2E':  # BorrarTodo
             nucleo.write(b'e')
-            selector=0
+            selector = 0
             print('entre')
 
-        elif selector=='p':  #Especifico
+        elif selector == 'p' or comandoPantallaNuevo == 'S22':  # Especifico
             nucleo.write(b'p')
-            selector=0
+            selector = 0
             print('entre')
 
-        elif selector=='t':  #LeerTodo
+        elif selector == 't' or comandoPantallaNuevo == 'S2T':  # LeerTodo
             nucleo.write(b't')
-            selector=0
+            selector = 0
             print('entre')
 
-
-
-
-
-
-
+        comandoPantallaNuevo = ''
         nucleo.close()
         time.sleep(0.1)  # 100ms
 
@@ -92,17 +88,25 @@ t = threading.Thread(target=timer)
 t.start()
 
 
+def obtenerCommand():
+    global comandoPantalla
+    global comandoPantallaNuevo
+    comandoPantallaNuevo = comandoPantalla.get()
+    print(comandoPantallaNuevo)
+
+
 def test():
     print('me llamaron')
 
 
 def OnOffLed():
     global selector
-    selector='@'
-    
+    selector = '@'
+
+
 def ADC():
     global selector
-    selector='w'
+    selector = 'w'
 
 
 # ------------------------Configuracion inicial de frames -------
@@ -127,7 +131,7 @@ botonReadInfoEspecifico = Button(buttonsFrame, text='Dato especifico', font=font
 combo = ttk.Combobox(buttonsFrame, values=[
                      "Bloque 1", "Bloque 2", "Bloque 3", "Bloque 4", "Bloque 5"], width=12)
 combo.grid(row=2, column=1)
-botonOffLed = Button(buttonsFrame, text='ON|OFF LED',command=OnOffLed, font=font.Font(
+botonOffLed = Button(buttonsFrame, text='ON|OFF LED', command=OnOffLed, font=font.Font(
     family="Verdana", size=8
 ), width=12).grid(
     row=3, column=0, padx=8, pady=15)
@@ -149,19 +153,20 @@ label = Label(registerFrame, text='COMANDO:')
 label.grid(row=0, column=0, pady=10, padx=8)
 label.config(fg="Black", bg='Light gray', font=("Verdana", 12), justify='left')
 
-entry = ttk.Entry(registerFrame,
-                  font=font.Font(
-                      family="Verdana",
-                      size=11,
-                      # weight=font.BOLD,   # Negrita.
-                      slant=font.ITALIC,  # Cursiva.
-                      overstrike=False,    # Tachado.
-                      underline=False      # Subrayado.
-                  ), width=11,
-                  ).grid(row=0, column=1, padx='5')
+comandoPantalla = StringVar()
+entry = Entry(registerFrame, textvariable=comandoPantalla,
+              font=font.Font(
+                  family="Verdana",
+                  size=11,
+                  # weight=font.BOLD,   # Negrita.
+                  slant=font.ITALIC,  # Cursiva.
+                  overstrike=False,    # Tachado.
+                  underline=False      # Subrayado.
+              ), width=11,
+              ).grid(row=0, column=1, padx='5')
 
 botonComand = Button(registerFrame, text='Enviar comando',
-                     width=33, font=font.Font(
+                     width=33, command=obtenerCommand, font=font.Font(
                          family="Verdana", size=8,
                      )).grid(row=1, column=0, columnspan=2)
 # entryComand.bind('<Return>', test())  # ('<Return>',funcionALlamar)
