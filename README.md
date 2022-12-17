@@ -18,9 +18,9 @@ El código incluye las siguientes funcionalidades:
 - Lectura y escritura de la hora y fecha del reloj DS3231 mediante la comunicación I2C
 - Lectura y escritura de datos en la memoria EEPROM mediante la comunicación I2C
 - Recepción de comandos a través del puerto serial para encender el led, leer el voltaje del ADC o leer un dato específico de la memoria EEPROM
-- Instrucciones de uso
 
-### Para utilizar este código, sigue estos pasos:
+###Instrucciones de uso
+Para utilizar este código, sigue estos pasos:
 
 1. Conecta la tarjeta Nucleo L476RG a tu computadora mediante un cable USB
 2. Abre una terminal y utiliza Mbed CLI para compilar y cargar el código en la tarjeta
